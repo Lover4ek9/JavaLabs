@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="pattern">%d{HH:mm:ss} %-5level %c{1} - %msg%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%highlight{${pattern}}{ERROR=red, WARN=yellow, INFO=green, DEBUG=cyan}"
+                           disableAnsi="false"/>
+        </Console>
+        <RollingFile name="All" fileName="logs/application.log"
+                     filePattern="logs/archive/application-%i.log.gz">
+            <PatternLayout pattern="${pattern}" charset="UTF-8"/>
+            <SizeBasedTriggeringPolicy size="1 MB"/>
+            <DefaultRolloverStrategy max="3"/>
+        </RollingFile>
+        <RollingFile name="Warnings" fileName="logs/warnings.log"
+                     filePattern="logs/archive/warnings-%i.log.gz">
+            <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${pattern}" charset="UTF-8"/>
+            <SizeBasedTriggeringPolicy size="1 MB"/>
+            <DefaultRolloverStrategy max="3"/>
+        </RollingFile>
+        <RollingFile name="Errors" fileName="logs/errors.log"
+                     filePattern="logs/archive/errors-%i.log.gz">
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${pattern}" charset="UTF-8"/>
+            <SizeBasedTriggeringPolicy size="1 MB"/>
+            <DefaultRolloverStrategy max="3"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="All"/>
+            <AppenderRef ref="Warnings"/>
+            <AppenderRef ref="Errors"/>
+        </Root>
+    </Loggers>
+</Configuration>
